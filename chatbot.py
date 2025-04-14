@@ -12,11 +12,25 @@ st.set_page_config(
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Custom CSS for modern minimalist UI (added chat message styles)
+# Custom CSS
 st.markdown("""
     <style>
+        /* Overall page background and text color */
+        html, body, [data-testid="stAppViewContainer"] {
+            background-color: #f7f7f7 !important;
+            color: #333 !important;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 2em;
+            margin-top: 10px;
+            color: #333;
+        }
+
         .user-message {
-            background-color: #f0f2f6;
+            background-color: #eceff1; /* Light gray */
+            color: #000;              /* Dark text */
             padding: 12px;
             border-radius: 15px;
             margin: 8px 0;
@@ -24,9 +38,10 @@ st.markdown("""
             float: right;
             clear: both;
         }
+
         .assistant-message {
-            background-color: #a83279;
-            color: white;
+            background-color: #a83279; 
+            color: #fff;
             padding: 12px;
             border-radius: 15px;
             margin: 8px 0;
@@ -34,15 +49,10 @@ st.markdown("""
             float: left;
             clear: both;
         }
-        .thinking-text {
-            color: #a83279;
-            font-style: italic;
-            margin: 10px 0;
-        }
-        .title {
-            text-align: center;
-            font-size: 2em;
-            margin-top: 10px;
+
+        /* Optional: remove default gray from Streamlit containers */
+        .css-18e3th9 {
+            background-color: transparent !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -102,7 +112,4 @@ if submit_button and user_input.strip() != "":
                 st.error(f"Request failed: {response.text}")
         except Exception as e:
             st.error(f"An error occurred: {e}")
-            
-    # Rerun to update chat display
-    st.experimental_rerun()
 

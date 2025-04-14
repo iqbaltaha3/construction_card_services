@@ -21,6 +21,7 @@ st.markdown("""
             color: #111;
             font-family: Arial, sans-serif;
         }
+
         /* Title styling */
         .title {
             text-align: center;
@@ -29,30 +30,56 @@ st.markdown("""
             margin-top: 20px;
             margin-bottom: 20px;
         }
-        /* Container for chat messages */
+
+        /* Center the chat container and limit width */
         .chat-container {
             max-width: 600px;
             margin: 0 auto;
         }
-        /* Styling for user messages (appearing on the right) */
+
+        /* User message (on the right) */
         .user-message {
-            background-color: #e1ffc7;
+            background-color: #e1ffc7; /* Light green bubble */
             padding: 10px 14px;
             border-radius: 12px;
             margin: 8px 0;
             text-align: right;
         }
-        /* Styling for assistant messages (appearing on the left) */
+
+        /* Assistant message (on the left) */
         .assistant-message {
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; /* Light gray bubble */
             padding: 10px 14px;
             border-radius: 12px;
             margin: 8px 0;
             text-align: left;
         }
-        /* Input box styling to make it simple and centered */
-        .input-box {
-            margin-top: 20px;
+
+        /* Make the text input and its container more neutral */
+        [data-testid="stTextInput"] label p {
+            color: #555 !important;
+        }
+        [data-testid="stTextInput"] > label > div > input {
+            background-color: #fff !important;
+            color: #111 !important;
+            border: 1px solid #ccc !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            padding: 8px !important;
+        }
+
+        /* Style the send button nicely */
+        .stButton button {
+            background-color: #4CAF50 !important; /* Simple green button */
+            color: #fff !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 8px 16px !important;
+            font-size: 14px !important;
+            cursor: pointer;
+        }
+        .stButton button:hover {
+            background-color: #45a049 !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -62,15 +89,23 @@ st.markdown('<div class="title">🏗️ Construction Card Services</div>', unsaf
 
 # Container for chat messages
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
 # Display chat history
 for msg in st.session_state.messages:
     if msg["role"] == "user":
-        st.markdown(f'<div class="user-message"><strong>You:</strong> {msg["content"]}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="user-message"><strong>You:</strong> {msg["content"]}</div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.markdown(f'<div class="assistant-message"><strong>Consultant:</strong> {msg["content"]}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="assistant-message"><strong>Consultant:</strong> {msg["content"]}</div>',
+            unsafe_allow_html=True
+        )
+
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Create a form for input with clear_on_submit enabled
+# Create a form for the input
 with st.form(key="chat_form", clear_on_submit=True):
     user_input = st.text_input(
         "", 
@@ -114,5 +149,6 @@ if submit_button and user_input.strip() != "":
                 st.error(f"Request failed: {response.text}")
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
 
 

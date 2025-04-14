@@ -12,34 +12,34 @@ st.set_page_config(
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Modern minimalist CSS for ChatGPT-like look
+# Minimalist CSS for a clean look
 st.markdown("""
     <style>
         html, body, [class*="css"] {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #1E1E1E;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #000000;
             padding: 0;
             margin: 0;
         }
         .title {
             font-size: 2.5em;
             font-weight: 600;
-            color: #a83279;
+            color: #a83279; /* reddish purple */
             text-align: center;
             margin-bottom: 30px;
             padding-top: 30px;
         }
         .stTextInput>div>div>input {
-            padding: 10px;
-            border: none;
-            border-radius: 15px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
             font-size: 16px;
         }
         .stButton>button {
             background-color: #a83279;
             color: white;
-            border-radius: 15px;
+            border-radius: 8px;
             padding: 12px 24px;
             font-size: 15px;
             transition: background 0.3s;
@@ -50,12 +50,13 @@ st.markdown("""
             background-color: #8f2f6f;
         }
         .chat-box {
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            background-color: #2C2C2C;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
         }
         .message-box {
             display: flex;
@@ -63,31 +64,36 @@ st.markdown("""
             gap: 10px;
         }
         .user-msg, .assistant-msg {
-            padding: 12px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             max-width: 70%;
             word-wrap: break-word;
+            font-size: 16px;
         }
         .user-msg {
-            background-color: #4B97A2;
+            background-color: #d1e7ff;
             align-self: flex-start;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .assistant-msg {
-            background-color: #2F4F4F;
+            background-color: #e0e0e0;
             align-self: flex-end;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .message-box p {
             margin: 0;
-            font-size: 16px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #666;
         }
     </style>
 """, unsafe_allow_html=True)
 
 # Title
 st.markdown('<div class="title">🏗️ CSCS Card Services</div>', unsafe_allow_html=True)
-
-# Create message input box
-user_input = st.text_input("Ask a question about CSCS cards:", placeholder="e.g. Do labourers need a CSCS card?")
 
 # Chat history section
 with st.container():
@@ -99,6 +105,9 @@ with st.container():
             else:
                 st.markdown(f'<div class="message-box"><div class="assistant-msg"><p>{chat["content"]}</p></div></div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+# Input box
+user_input = st.text_input("Ask a question about CSCS cards:", placeholder="e.g. Do labourers need a CSCS card?")
 
 # Submit button to send question
 if st.button("Ask"):
@@ -138,10 +147,18 @@ if st.button("Ask"):
         except Exception as e:
             st.session_state.chat_history.append({"role": "assistant", "content": f"An error occurred: {e}"})
 
-# Fix scroll position and smooth chat flow
+# Footer
+st.markdown("""
+    <footer>
+        Official Partner of UK Construction Industry ∙ v2.1.2024
+    </footer>
+""", unsafe_allow_html=True)
+
+# Scroll to the latest message
 st.markdown("""
     <script>
         const chatBox = document.querySelector('.chat-box');
         chatBox.scrollTop = chatBox.scrollHeight;
     </script>
 """, unsafe_allow_html=True)
+

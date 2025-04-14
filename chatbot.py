@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import re
 
 # Set page configuration
 st.set_page_config(
@@ -7,6 +8,12 @@ st.set_page_config(
     page_icon="🏗️",
     layout="centered"
 )
+
+# Helper function to convert URLs in the text into clickable links.
+def linkify(text):
+    url_pattern = r"(https?://[^\s]+)"
+    # Replace URL with an HTML <a> tag that opens the link in a new tab.
+    return re.sub(url_pattern, r'<a href="\1" target="_blank">\1</a>', text)
 
 # Initialize chat history in session state
 if "messages" not in st.session_state:
@@ -36,7 +43,7 @@ st.markdown("""
         }
         /* User message styling (right aligned) */
         .user-message {
-            background-color: #e1ffc7; /* Light green bubble */
+            background-color: #e1ffc7;
             padding: 10px 14px;
             border-radius: 12px;
             margin: 8px 0;
@@ -44,7 +51,7 @@ st.markdown("""
         }
         /* Assistant message styling (left aligned) */
         .assistant-message {
-            background-color: #f0f0f0; /* Light gray bubble */
+            background-color: #f0f0f0;
             padding: 10px 14px;
             border-radius: 12px;
             margin: 8px 0;
@@ -64,7 +71,7 @@ st.markdown("""
         }
         /* Send button styling */
         .stButton button {
-            background-color: #4CAF50 !important; /* Green button */
+            background-color: #4CAF50 !important;
             color: #fff !important;
             border: none !important;
             border-radius: 4px !important;
@@ -90,7 +97,7 @@ with st.form(key="chat_form", clear_on_submit=True):
     )
     submit_button = st.form_submit_button("Send")
 
-# Process the form submission if triggered and input is not empty
+# Process form submission if triggered and input is not empty
 if submit_button and user_input.strip() != "":
     # Append user's message immediately to the chat history
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -126,13 +133,21 @@ if submit_button and user_input.strip() != "":
         except Exception as e:
             st.error(f"An error occurred: {e}")
 
-# Display chat history (after processing the submission so the new messages are visible)
+# Display chat history (processing the assistant text to make links clickable)
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 for msg in st.session_state.messages:
     if msg["role"] == "user":
-        st.markdown(f'<div class="user-message"><strong>You:</strong> {msg["content"]}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="user-message"><strong>You:</strong> {msg["content"]}</div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.markdown(f'<div class="assistant-message"><strong>Consultant:</strong> {msg["content"]}</div>', unsafe_allow_html=True)
+        # Process the assistant message text to wrap URLs with clickable <a> tags.
+        processed_text = linkify(msg["content"])
+        st.markdown(
+            f'<div class="assistant-message"><strong>Consultant:</strong> {processed_text}</div>',
+            unsafe_allow_html=True
+        )
 st.markdown('</div>', unsafe_allow_html=True)
 
 

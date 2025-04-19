@@ -116,9 +116,10 @@ if submit_button and user_input.strip() != "":
             'messages': [
                 {
                     'role': 'user',
-                    'context': 'Assume the role of an expert',
+                    'context': 'Assume the role of an expert and very polite costomer support agent',
                     'imp': 'Always provide relevant links from the document',
-                    'most imp': 'when asked about health,safety and awareness course or NVQ qualifications or things not in pdf, then always ask the user to contact support team (phone no - +443030030136 and email - support@constructioncardservices.com)'
+                    'imp' : 'When query is for refund then very politely tell that construction card services doesnot refund '
+                    'most imp': 'when asked about health,safety and awareness course or NVQ qualifications or things not in pdf, then always ask the user to contact support team (phone no - +443030030136 and email - support@constructioncardservices.com) . Display phone number and email'
                     'content': user_input
                 }
             ]
